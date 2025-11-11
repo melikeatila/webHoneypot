@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Yorumlar - Oat's Hobby</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+  </head>
+  <body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="logo"/>
+        </a>
+        <nav class="navbar"> 
+            <a href="index.html"> Ana Sayfa </a>
+            <a href="about.html"> Hakkımızda </a>
+            <a href="store.html"> Mağaza </a>
+            <a href="reviews.html" class="active"> Yorumlar </a>
+            <a href="contact.html"> İletişim </a>
+        </nav>
+        
+        <div class="header-right">
+            <div class="buttons">
+                <button id="search-btn">
+                    <i class="fa fa-search"></i>
+                </button>
+                <button id="cart-btn" style="position: relative;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </button>
+                <button id="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button id="user-btn" onclick="window.open('/auth.html', '_blank')">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+            
+            
+            <div class="user-info" id="user-info" style="display: none;">
+                <span id="username-display"></span>
+                <button id="logout-btn" class="btn-small">Çıkış</button>
+            </div>
+        </div>
+        
+       <div class="search-form ">
+        <input type="text" class="search-input" id="search-box" placeholder="Aramak"/>
+        <i class="fas fa-search"></i>
+       </div>
+
+       <div class="cart-items-container ">
+        <div id="cart-items-list">
+            <div class="empty-cart" id="empty-cart-message">
+                <i class="fas fa-shopping-cart" style="font-size: 5rem; color: #ccc; margin-bottom: 1rem;"></i>
+                <p style="font-size: 1.8rem; color: #666;">Sepetiniz boş</p>
+            </div>
+        </div>
+        <div id="cart-total" style="display: none; margin: 2rem 0; padding: 1rem; background: #f5f5f5; border-radius: 0.5rem;">
+            <h3 style="font-size: 2rem; color: #121212;">Toplam: <span id="total-price">0.00₺</span></h3>
+        </div>
+        <a href="#" class="btn" id="checkout-btn" style="display: none;">Satın Al</a>
+       </div>
+
+    </header>
+
+    <section class="review" id="review" style="padding-top: 12rem;">
+        <h1 class="heading"> Müşteri Yorumları</h1>
+        
+        
+        <div style="max-width: 800px; margin: 3rem auto; padding: 2rem; background: #f9f9f9; border-radius: 1rem;">
+            <h2 style="font-size: 2.5rem; color: #121212; margin-bottom: 2rem; text-align: center;">Yorum Ekle</h2>
+            <form id="review-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div style="display: flex; flex-direction: column;">
+                    <label style="font-size: 1.6rem; color: #121212; margin-bottom: 0.5rem;">Ad Soyad</label>
+                    <input type="text" id="review-name" required style="padding: 1rem; font-size: 1.6rem; border: 1px solid #ddd; border-radius: 0.5rem;" placeholder="Adınız ve Soyadınız">
+                </div>
+                
+                <div style="display: flex; flex-direction: column;">
+                    <label style="font-size: 1.6rem; color: #121212; margin-bottom: 0.5rem;">Yorumunuz</label>
+                    <textarea id="review-text" style="padding: 1rem; font-size: 1.6rem; border: 1px solid #ddd; border-radius: 0.5rem; min-height: 120px; resize: vertical;" placeholder="Yorumunuzu yazın..."></textarea>
+                </div>
+                
+                <div style="display: flex; flex-direction: column;">
+                    <label style="font-size: 1.6rem; color: #121212; margin-bottom: 0.5rem;">Puanlama</label>
+                    <div id="rating-stars" style="display: flex; gap: 0.5rem; font-size: 3rem; cursor: pointer; justify-content: center;">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <input type="hidden" id="review-rating" value="0">
+                </div>
+                
+                <button type="submit" class="btn" style="align-self: center; margin-top: 1rem;">Yorum Gönder</button>
+            </form>
+        </div>
+        
+        
+        <div class="box-contanier" id="reviews-container" style="display: flex; flex-direction: column; align-items: center; gap: 2rem; max-width: 800px; margin: 0 auto;">
+            
+        </div>
+    </section>
+
+    <section class="footer">
+        <div class="search">
+            <input type="text" class="search-input" placeholder="Aramak">
+            <button class="btn ">Ara</button>
+            <div class="share">
+                <a href="#" class="fab fa-instagram"></a>
+                <a href="#" class="fab fa-linkedin"></a>
+            </div>
+        </div>
+        
+        <div class="footer-links" style="margin-top: 20px; font-size: 0.8em; opacity: 0.5;">
+            <a href="/sitemap.xml" style="color: #666; margin: 0 10px;">Sitemap</a>
+            <a href="/robots.txt" style="color: #666; margin: 0 10px;">Robots</a>
+            <a href="/admin" style="color: #666; margin: 0 10px;">Admin</a>
+            <a href="/backup" style="color: #666; margin: 0 10px;">Backup</a>
+            <a href="/config" style="color: #666; margin: 0 10px;">Config</a>
+            <a href="/api/docs" style="color: #666; margin: 0 10px;">API Docs</a>
+        </div>
+        
+        <div class="credit">
+            created by <span>Melike Atila</span> | all rights reserved 
+        </div>
+    </section>
+    
+    <script src="js/script.js?v=4"></script>
+    
+    
+    <script>
+        function getCurrentUser() {
+            const user = localStorage.getItem('currentUser');
+            return user ? JSON.parse(user) : null;
+        }
+        
+        function checkUserStatus() {
+            const currentUser = getCurrentUser();
+            const userBtn = document.getElementById('user-btn');
+            const userInfo = document.getElementById('user-info');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (currentUser) {
+                userBtn.style.display = 'none';
+                userInfo.style.display = 'flex';
+                usernameDisplay.textContent = currentUser.name;
+            } else {
+                userBtn.style.display = 'block';
+                userInfo.style.display = 'none';
+            }
+        }
+        
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
+                checkUserStatus();
+            });
+        }
+        
+        checkUserStatus();
+        setInterval(checkUserStatus, 1000);
+    </script>
+    
+    
+    <script>
+        
+        function getReviews() {
+            const reviews = localStorage.getItem('reviews');
+            return reviews ? JSON.parse(reviews) : [];
+        }
+        
+        
+        function saveReviews(reviews) {
+            localStorage.setItem('reviews', JSON.stringify(reviews));
+        }
+        
+        
+        function getAvatar() {
+            return 'images/avatar111.jpg';
+        }
+        
+        
+        function capitalizeFirst(text) {
+            return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+        }
+        
+        
+        function renderStars(rating) {
+            let starsHTML = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            }
+            if (hasHalfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+            for (let i = fullStars + (hasHalfStar ? 1 : 0); i < 5; i++) {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+            
+            return starsHTML;
+        }
+        
+        
+        function displayReviews() {
+            const reviews = getReviews();
+            const container = document.getElementById('reviews-container');
+            
+            if (reviews.length === 0) {
+                container.innerHTML = '<p style="text-align: center; font-size: 2rem; color: #666; padding: 3rem;">Henüz yorum yok. İlk yorumu siz yapın!</p>';
+                return;
+            }
+            
+            container.innerHTML = reviews.map(review => `
+                <div class="box" style="width: 100%; max-width: 600px; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <img src="images/yorum.png" alt="yorum" style="width: 50px; height: 50px; object-fit: contain;"/>
+                    <p>"${review.text}"</p>
+                    <div style="margin-top: auto;">
+                        <img src="${review.avatar}" alt="Kullanıcı" class="user" />
+                        <h3>${review.name}</h3>
+                        <div class="stars">
+                            ${renderStars(review.rating)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        
+        const ratingStars = document.querySelectorAll('#rating-stars i');
+        let selectedRating = 0;
+        
+        ratingStars.forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('review-rating').value = selectedRating;
+                
+                
+                ratingStars.forEach((s, index) => {
+                    if (index < selectedRating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+            
+            
+            star.addEventListener('mouseenter', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                ratingStars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('fas');
+                        s.classList.remove('far');
+                    } else {
+                        s.classList.add('far');
+                        s.classList.remove('fas');
+                    }
+                });
+            });
+        });
+        
+        
+        document.getElementById('rating-stars').addEventListener('mouseleave', function() {
+            ratingStars.forEach((s, index) => {
+                if (index < selectedRating) {
+                    s.classList.add('fas');
+                    s.classList.remove('far');
+                } else {
+                    s.classList.add('far');
+                    s.classList.remove('fas');
+                }
+            });
+        });
+        
+        
+        document.getElementById('review-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('review-name').value.trim();
+            const text = document.getElementById('review-text').value.trim();
+            const rating = selectedRating;
+            
+            if (!name) {
+                alert('Lütfen adınızı yazın!');
+                return;
+            }
+            
+            if (rating === 0) {
+                alert('Lütfen bir puan seçin!');
+                return;
+            }
+            
+            
+            const newReview = {
+                id: Date.now(),
+                name: name,
+                text: text ? capitalizeFirst(text) : '',
+                rating: rating,
+                avatar: getAvatar(),
+                date: new Date().toISOString()
+            };
+            
+           
+            const reviews = getReviews();
+            reviews.unshift(newReview); 
+            saveReviews(reviews);
+            
+            
+            document.getElementById('review-name').value = '';
+            document.getElementById('review-text').value = '';
+            selectedRating = 0;
+            ratingStars.forEach(s => {
+                s.classList.remove('fas');
+                s.classList.add('far');
+            });
+            
+            
+            displayReviews();
+            
+            
+            alert('Yorumunuz başarıyla eklendi! Teşekkürler! 🎉');
+        });
+        
+        
+        displayReviews();
+        
+        
+        (function updateOldAvatars() {
+            const reviews = getReviews();
+            if (reviews.length > 0) {
+                const updated = reviews.map(review => ({
+                    ...review,
+                    avatar: 'images/avatar111.jpg'
+                }));
+                saveReviews(updated);
+                displayReviews();
+            }
+        })();
+    </script>
+    
+  </body>
+</html>

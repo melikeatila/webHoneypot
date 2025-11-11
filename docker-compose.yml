@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oats-hobby-honeypot
+    ports:
+      - "8000:8000"
+    volumes:
+     
+      - honeypot-data:/data
+      
+      - .:/app
+    environment:
+      - HONEYPOT_DB_PATH=/data/honeypot.db
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - honeypot-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/info"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: honeypot-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - honeypot-data:/data:ro 
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=honeypot2025
+      - GF_INSTALL_PLUGINS=frser-sqlite-datasource
+    restart: unless-stopped
+    networks:
+      - honeypot-net
+    depends_on:
+      - web
+
+volumes:
+  honeypot-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+networks:
+  honeypot-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

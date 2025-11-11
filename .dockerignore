@@ -1,0 +1,46 @@
+# Docker ignore dosyası
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# DB dosyaları (container içinde /data'da tutulacak)
+*.db
+*.db-journal
+
+# Environment
+.env
+.env.local
+.venv
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Backup dosyaları
+*.bak
+*.backup
+*.zip
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# README ve docs (opsiyonel, isterseniz kaldırabilirsiniz)
+# README.md

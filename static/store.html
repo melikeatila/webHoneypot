@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Mağaza - Oat's Hobby</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+  </head>
+  <body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="logo"/>
+        </a>
+        <nav class="navbar"> 
+            <a href="index.html"> Ana Sayfa </a>
+            <a href="about.html"> Hakkımızda </a>
+            <a href="store.html" class="active"> Mağaza </a>
+            <a href="reviews.html"> Yorumlar </a>
+            <a href="contact.html"> İletişim </a>
+        </nav>
+        
+        <div class="header-right">
+            <div class="buttons">
+                <button id="search-btn">
+                    <i class="fa fa-search"></i>
+                </button>
+                <button id="cart-btn" style="position: relative;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </button>
+                <button id="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button id="user-btn" onclick="window.open('/auth.html', '_blank')">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+            
+           
+            <div class="user-info" id="user-info" style="display: none;">
+                <span id="username-display"></span>
+                <button id="logout-btn" class="btn-small">Çıkış</button>
+            </div>
+        </div>
+        
+       <div class="search-form ">
+        <input type="text" class="search-input" id="search-box" placeholder="Aramak"/>
+        <i class="fas fa-search"></i>
+       </div>
+
+       <div class="cart-items-container ">
+        <div id="cart-items-list">
+            
+            <div class="empty-cart" id="empty-cart-message">
+                <i class="fas fa-shopping-cart" style="font-size: 5rem; color: #ccc; margin-bottom: 1rem;"></i>
+                <p style="font-size: 1.8rem; color: #666;">Sepetiniz boş</p>
+            </div>
+        </div>
+        <div id="cart-total" style="display: none; margin: 2rem 0; padding: 1rem; background: #f5f5f5; border-radius: 0.5rem;">
+            <h3 style="font-size: 2rem; color: #121212;">Toplam: <span id="total-price">0.00₺</span></h3>
+        </div>
+        <a href="#" class="btn" id="checkout-btn" style="display: none;">Satın Al</a>
+       </div>
+
+    </header>
+
+    <section class="mağaza" style="padding-top: 12rem;">
+        <h1 class="heading"> Mağaza</h1>
+        <div class="box-container">
+            <div class="box">
+                <div class="box-head">
+              <img src="images/yapboz.png" alt="mağaza">
+              <span class="mağaza-kategori">PUZZLE</span>
+              <h3>1000 Parça Puzzle</h3>
+              <div class="price">199.99₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="1000 Parça Puzzle" data-price="199.99" data-image="images/yapboz.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/akrilik.png" alt="mağaza">
+              <span class="mağaza-kategori">BOYA</span>
+              <h3>Akrilik Boya</h3>
+              <div class="price">54.90₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Akrilik Boya" data-price="54.90" data-image="images/akrilik.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/tuval.png" alt="mağaza">
+              <span class="mağaza-kategori">TUVAL</span>
+              <h3>Tuval</h3>
+              <div class="price">136.99₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Tuval" data-price="136.99" data-image="images/tuval.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/lego1.png" alt="mağaza">
+              <span class="mağaza-kategori">LEGO</span>
+              <h3>Minik Bitkiler Lego</h3>
+              <div class="price">764.99₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Minik Bitkiler Lego" data-price="764.99" data-image="images/lego1.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/lego2.png" alt="mağaza">
+              <span class="mağaza-kategori">LEGO</span>
+              <h3>New York Lego</h3>
+              <div class="price">1129.99₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="New York Lego" data-price="1129.99" data-image="images/lego2.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/lego3.png" alt="mağaza">
+              <span class="mağaza-kategori">LEGO</span>
+              <h3>Pasta Lego</h3>
+              <div class="price">889.99₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Pasta Lego" data-price="889.99" data-image="images/lego3.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/fırça seti.jpeg" alt="mağaza">
+              <span class="mağaza-kategori">FIRÇA</span>
+              <h3>Fırça Seti</h3>
+              <div class="price">439.99₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Fırça Seti" data-price="439.99" data-image="images/fırça seti.jpeg"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/seramik.png" alt="mağaza">
+              <span class="mağaza-kategori">SERAMİK HAMURU</span>
+              <h3>Beyaz Seramik Hamuru</h3>
+              <div class="price">119.99₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Beyaz Seramik Hamuru" data-price="119.99" data-image="images/seramik.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/sprey.jpg" alt="mağaza">
+              <span class="mağaza-kategori">BOYA</span>
+              <h3>Sprey Boya</h3>
+              <div class="price">250.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Sprey Boya" data-price="250.00" data-image="images/sprey.jpg"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/ebru.jpg" alt="mağaza">
+              <span class="mağaza-kategori">SET</span>
+              <h3>Ebru Başlangıç Seti</h3>
+              <div class="price">799.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Ebru Başlangıç Seti" data-price="799.00" data-image="images/ebru.jpg"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/altıgentuval.jpg" alt="mağaza">
+              <span class="mağaza-kategori">TUVAL</span>
+              <h3>Altıgen Tuval</h3>
+              <div class="price">229.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Altıgen Tuval" data-price="229.00" data-image="images/altıgentuval.jpg"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/firca.jpg" alt="mağaza">
+              <span class="mağaza-kategori">FIRÇA</span>
+              <h3>Fırça Seti</h3>
+              <div class="price">470.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Fırça Seti" data-price="470.00" data-image="images/firca.jpg"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/mozaik.jpg" alt="mağaza">
+              <span class="mağaza-kategori">SET</span>
+              <h3>Mozaik Başlangıç Seti</h3>
+              <div class="price">1238.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Mozaik Başlangıç Seti" data-price="1238.00" data-image="images/mozaik.jpg"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/seramik22.png" alt="mağaza">
+              <span class="mağaza-kategori">SERAMİK</span>
+              <h3>Telli Seramik Aksesuarlı 6'lı Set</h3>
+              <div class="price">625.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Telli Seramik Aksesuarlı 6'lı Set" data-price="625.00" data-image="images/seramik22.png"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/ahsapboyama.jpg" alt="mağaza">
+              <span class="mağaza-kategori">SET</span>
+              <h3>Ahşap Boyama Başlangıç Seti</h3>
+              <div class="price">949.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Ahşap Boyama Başlangıç Seti" data-price="949.00" data-image="images/ahsapboyama.jpg"> Sepete Ekle</button>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-head">
+              <img src="images/orgu.jpg" alt="mağaza">
+              <span class="mağaza-kategori">SET</span>
+              <h3>Örgü Başlangıç Seti</h3>
+              <div class="price">579.00₺</div>
+                </div>
+                <div class="box-bottom">
+                    <button type="button" class="btn add-to-cart" data-name="Örgü Başlangıç Seti" data-price="579.00" data-image="images/orgu.jpg"> Sepete Ekle</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="footer">
+        <div class="search">
+            <input type="text" class="search-input" placeholder="Aramak">
+            <button class="btn ">Ara</button>
+            <div class="share">
+                <a href="#" class="fab fa-instagram"></a>
+                <a href="#" class="fab fa-linkedin"></a>
+            </div>
+        </div>
+        
+        
+        <div class="footer-links" style="margin-top: 20px; font-size: 0.8em; opacity: 0.5;">
+            <a href="/sitemap.xml" style="color: #666; margin: 0 10px;">Sitemap</a>
+            <a href="/robots.txt" style="color: #666; margin: 0 10px;">Robots</a>
+            <a href="/admin" style="color: #666; margin: 0 10px;">Admin</a>
+            <a href="/backup" style="color: #666; margin: 0 10px;">Backup</a>
+            <a href="/config" style="color: #666; margin: 0 10px;">Config</a>
+            <a href="/api/docs" style="color: #666; margin: 0 10px;">API Docs</a>
+        </div>
+        
+        <div class="credit">
+            created by <span>Melike Atila</span> | all rights reserved 
+        </div>
+    </section>
+    
+    <script src="js/script.js?v=4"></script>
+    
+    
+    <script>
+        
+        let cart = [];
+        
+       
+        const cartCount = document.querySelector("#cart-count");
+        const cartItemsList = document.querySelector("#cart-items-list");
+        const cartTotal = document.querySelector("#cart-total");
+        const totalPrice = document.querySelector("#total-price");
+        const checkoutBtn = document.querySelector("#checkout-btn");
+        const cartContainer = document.querySelector(".cart-items-container");
+        
+        
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+        
+        
+        function calculateTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+        }
+        
+        
+        function renderCart() {
+            cartItemsList.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart" style="font-size: 5rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p style="font-size: 1.8rem; color: #666;">Sepetiniz boş</p>
+                    </div>
+                `;
+                cartTotal.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+            } else {
+                cart.forEach((item, index) => {
+                    const cartItemDiv = document.createElement('div');
+                    cartItemDiv.className = 'cart-item';
+                    cartItemDiv.innerHTML = `
+                        <i class="fas fa-times" onclick="removeFromCart(${index})" style="cursor: pointer;"></i>
+                        <img src="${item.image}" alt="${item.name}"/>
+                        <div class="content">
+                            <h3>${item.name}</h3>
+                            <div class="price">${item.price}₺ x ${item.quantity}</div>
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+                                <button onclick="decreaseQuantity(${index})" style="background: #ec5808; color: white; border: none; width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 1.5rem;">-</button>
+                                <span style="font-size: 1.6rem; font-weight: bold;">${item.quantity}</span>
+                                <button onclick="increaseQuantity(${index})" style="background: #ec5808; color: white; border: none; width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 1.5rem;">+</button>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsList.appendChild(cartItemDiv);
+                });
+                
+                cartTotal.style.display = 'block';
+                totalPrice.textContent = calculateTotal() + '₺';
+                checkoutBtn.style.display = 'inline-block';
+            }
+            
+            updateCartCount();
+        }
+        
+        
+        window.addToCart = function(name, price, image) {
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    name: name,
+                    price: parseFloat(price),
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            renderCart();
+            cartContainer.classList.add("active");
+            showNotification(`${name} sepete eklendi! 🛒`);
+        }
+        
+      
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            renderCart();
+            showNotification('Ürün sepetten çıkarıldı');
+        }
+        
+        
+        window.increaseQuantity = function(index) {
+            cart[index].quantity++;
+            renderCart();
+        }
+        
+        
+        window.decreaseQuantity = function(index) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity--;
+                renderCart();
+            } else {
+                removeFromCart(index);
+            }
+        }
+        
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 10rem;
+                right: 2rem;
+                background: #4CAF50;
+                color: white;
+                padding: 1.5rem 2.5rem;
+                border-radius: 0.5rem;
+                font-size: 1.6rem;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+        
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            
+            addToCartButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const price = this.getAttribute('data-price');
+                    const image = this.getAttribute('data-image');
+                    
+                    addToCart(name, price, image);
+                });
+            });
+            
+            renderCart();
+        });
+        
+       
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    
+    
+    <script>
+        
+        function getCurrentUser() {
+            const user = localStorage.getItem('currentUser');
+            return user ? JSON.parse(user) : null;
+        }
+        
+        
+        function checkUserStatus() {
+            const currentUser = getCurrentUser();
+            const userBtn = document.getElementById('user-btn');
+            const userInfo = document.getElementById('user-info');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (currentUser) {
+                userBtn.style.display = 'none';
+                userInfo.style.display = 'flex';
+                usernameDisplay.textContent = currentUser.name;
+            } else {
+                userBtn.style.display = 'block';
+                userInfo.style.display = 'none';
+            }
+        }
+        
+        
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
+                showNotification('👋 Çıkış yapıldı!');
+                checkUserStatus();
+            });
+        }
+        
+        
+        checkUserStatus();
+        
+        
+        setInterval(checkUserStatus, 1000);
+    </script>
+    
+  </body>
+</html>

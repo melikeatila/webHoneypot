@@ -1,0 +1,64 @@
+# robots.txt - Honeypot Configuration
+# This file intentionally exposes honeypot traps to malicious bots
+# while hiding them from legitimate search engines
+
+# Block all bots from accessing honeypot endpoints
+User-agent: *
+
+# Honeypot traps - These are intentionally listed to attract malicious bots
+Disallow: /admin/
+Disallow: /api/admin/
+Disallow: /backup/
+Disallow: /backups/
+Disallow: /db/
+Disallow: /database/
+Disallow: /config/
+Disallow: /.env
+Disallow: /.git/
+Disallow: /.svn/
+Disallow: /phpMyAdmin/
+Disallow: /phpmyadmin/
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /administrator/
+Disallow: /login/
+Disallow: /console/
+Disallow: /api/upload
+Disallow: /api/search
+Disallow: /debug/
+Disallow: /test/
+Disallow: /tmp/
+Disallow: /temp/
+Disallow: /private/
+Disallow: /secret/
+Disallow: /hidden/
+
+# Allow search engines to index public pages
+Allow: /
+Allow: /index.html
+Allow: /dashboard.html
+Allow: /styles/
+Allow: /js/
+Allow: /images/
+
+# Sitemap (if you have one)
+# Sitemap: https://yoursite.com/sitemap.xml
+
+# Crawl-delay for all bots
+Crawl-delay: 10
+
+# Special rules for common search engines
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin/
+Disallow: /api/

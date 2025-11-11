@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Oat's Hobby - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+       
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .header-stat {
+            text-align: center;
+        }
+
+        .header-stat .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .header-stat .label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+       
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .chart-card h3 {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 200px;
+        }
+
+        .chart-wrapper.tall {
+            height: 250px;
+        }
+
+        .chart-wrapper.short {
+            height: 150px;
+        }
+
+        
+        .chart-card.large {
+            grid-column: span 2;
+        }
+
+        .chart-card.full {
+            grid-column: span 3;
+        }
+
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #2a2a2a;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-card .icon {
+            font-size: 28px;
+            color: #ffd700;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .stat-card .label {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .stat-card .change {
+            font-size: 12px;
+            color: #10b981;
+        }
+
+        .stat-card .change.negative {
+            color: #ef4444;
+        }
+
+        
+        .map-container {
+            background: #0a0a0a;
+            border-radius: 8px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+
+        
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 12px;
+            border-bottom: 1px solid #2a2a2a;
+            display: flex;
+            gap: 12px;
+            align-items: start;
+            transition: background 0.2s ease;
+        }
+
+        .activity-item:hover {
+            background: #222;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            font-size: 18px;
+            margin-top: 2px;
+            color: #ffd700;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content .title {
+            font-size: 13px;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+        }
+
+        .activity-content .meta {
+            font-size: 11px;
+            color: #666;
+        }
+
+        
+        .products-table {
+            width: 100%;
+        }
+
+        .products-table th {
+            text-align: left;
+            padding: 12px;
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .products-table td {
+            padding: 12px;
+            font-size: 13px;
+            border-bottom: 1px solid #222;
+        }
+
+        .products-table tr:hover {
+            background: #222;
+        }
+
+        .product-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .product-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            background: #333;
+            object-fit: cover;
+        }
+
+        .progress-bar {
+            background: #2a2a2a;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+       
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 16px 20px;
+            min-width: 300px;
+            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .toast.success {
+            border-color: #10b981;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        .toast.warning {
+            border-color: #f59e0b;
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .toast-message {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .toast-close:hover {
+            color: #fff;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .toast.removing {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+
+        
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .chart-card.large,
+            .chart-card.full {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid,
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+            .chart-card.large,
+            .chart-card.full {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="toast-container" id="toast-container"></div>
+
+    <div class="container">
+       
+        <div class="header">
+            <h1> Honeypot Yapay Zeka Destekli Dashboard</h1>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <div class="value" id="total-requests">-</div>
+                    <div class="label">Toplam İstek</div>
+                </div>
+                <div class="header-stat">
+                    <div class="value" id="threats-detected">-</div>
+                    <div class="label">Tespit Edilen Tehdit</div>
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="stats-row">
+            <div class="stat-card">
+                
+                <div class="value" id="total-requests-stat">-</div>
+                <div class="label">Toplam İstek Sayısı</div>
+                <div class="change" id="requests-trend">Canlı izleme aktif</div>
+            </div>
+            <div class="stat-card">
+                
+                <div class="value" id="anomaly-count">-</div>
+                <div class="label">Yapay Zeka Anomalileri</div>
+                <div class="change" id="anomaly-trend">Analiz ediliyor...</div>
+            </div>
+            <div class="stat-card">
+                
+                <div class="value" id="bait-clicks">-</div>
+                <div class="label">Tuzak Tıklamaları</div>
+                <div class="change">Honeypot sistemleri aktif</div>
+            </div>
+            <div class="stat-card">
+                
+                <div class="value" id="unique-ips">-</div>
+                <div class="label">Benzersiz IP Adresi</div>
+                <div class="change">Tüm zamanlar</div>
+            </div>
+        </div>
+
+        
+        <div class="dashboard-grid">
+           
+            <div class="chart-card large">
+                <h3>Yapay Zeka Anomali Skoru Dağılımı</h3>
+                <div class="chart-wrapper tall">
+                    <canvas id="anomalyScoreChart"></canvas>
+                </div>
+            </div>
+
+           
+            <div class="chart-card">
+                <h3>Saatlik Saldırı Deseni</h3>
+                <p style="font-size: 12px; color: #888; margin: -10px 0 10px 0;">Son 12 saatlik saldırı dağılımı (Türkiye saati)</p>
+                <div class="chart-wrapper tall">
+                    <canvas id="hourlyPatternChart"></canvas>
+                </div>
+            </div>
+
+            
+            <div class="chart-card">
+                <h3>Tuzak Tıklama Histogramı</h3>
+                <div class="chart-wrapper">
+                    <canvas id="baitClicksChart"></canvas>
+                </div>
+            </div>
+
+            
+            <div class="chart-card">
+                <h3>Saldırı Zaman Çizelgesi</h3>
+                <p style="font-size: 12px; color: #888; margin: -10px 0 10px 0;">Son 7 günlük saldırı dağılımı</p>
+                <div class="chart-wrapper">
+                    <canvas id="attackTimelineChart"></canvas>
+                </div>
+            </div>
+
+           
+            <div class="chart-card">
+                <h3>En Çok Saldıran IP'ler</h3>
+                <div class="chart-wrapper">
+                    <canvas id="topIPsChart"></canvas>
+                </div>
+            </div>
+
+            
+            <div class="chart-card">
+                <h3>Saldırı Tipi Dağılımı</h3>
+                <div class="chart-wrapper">
+                    <canvas id="attackTypeChart"></canvas>
+                </div>
+            </div>
+
+            
+            <div class="chart-card">
+                <h3>Hedeflenen Yollar</h3>
+                <div class="chart-wrapper">
+                    <canvas id="pathAnalysisChart"></canvas>
+                </div>
+            </div>
+
+            
+            <div class="chart-card">
+                <h3>User Agent Dağılımı</h3>
+                <div class="chart-wrapper">
+                    <canvas id="userAgentChart"></canvas>
+                </div>
+            </div>
+
+            
+            <div class="chart-card large">
+                <h3> Yapay Zeka Tespit Edilen Anomaliler</h3>
+                <div class="activity-list" id="anomaly-list">
+                    <div class="activity-item">
+                        
+                        <div class="activity-content">
+                            <div class="title">Anomaliler yükleniyor...</div>
+                            <div class="meta">Yapay zeka analizi devam ediyor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="chart-card">
+                <h3> Son Güvenlik Olayları</h3>
+                <div class="activity-list" id="activity-feed">
+                    <div class="activity-item">
+                        <div class="activity-icon">�</div>
+                        <div class="activity-content">
+                            <div class="title">Aktiviteler yükleniyor...</div>
+                            <div class="meta">Sistem başlatılıyor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        function maskIP(ip) {
+            if (!ip) return 'Unknown';
+            const parts = ip.split('.');
+            if (parts.length === 4) {
+                
+                return `${parts[0]}.${parts[1]}.*.*`;
+            } else if (ip.includes(':')) {
+                
+                const segments = ip.split(':');
+                return segments[0] + ':****';
+            }
+            return ip; 
+        }
+
+        
+        const chartColors = {
+            danger: 'rgb(239, 68, 68)',
+            warning: 'rgb(245, 158, 11)',
+            success: 'rgb(16, 185, 129)',
+            info: 'rgb(59, 130, 246)',
+            purple: 'rgb(153, 102, 255)',
+            pink: 'rgb(236, 72, 153)',
+        };
+
+        
+        Chart.defaults.color = '#888';
+        Chart.defaults.borderColor = '#2a2a2a';
+
+       
+        let charts = {};
+
+        
+        let lastBaitCount = 0;
+        let lastAnomalyCount = 0;
+        let lastAdminAttempts = 0;
+
+        function showToast(title, message, type = 'danger', duration = 5000) {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'danger' ? '' : type === 'warning' ? '' : '';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            container.appendChild(toast);
+            
+            
+            setTimeout(() => {
+                toast.classList.add('removing');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        
+        const anomalyScoreCtx = document.getElementById('anomalyScoreChart').getContext('2d');
+        charts.anomalyScore = new Chart(anomalyScoreCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Normal (>-0.3)', 'Şüpheli (-0.3 to -0.5)', 'Anomali (-0.5 to -0.7)', 'Kritik (<-0.7)'],
+                datasets: [{
+                    label: 'İstek Sayısı',
+                    data: [0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.7)',
+                        'rgba(59, 130, 246, 0.7)',
+                        'rgba(245, 158, 11, 0.7)',
+                        'rgba(239, 68, 68, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgb(16, 185, 129)',
+                        'rgb(59, 130, 246)',
+                        'rgb(245, 158, 11)',
+                        'rgb(239, 68, 68)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#2a2a2a' },
+                        ticks: { precision: 0 }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        
+        const baitClicksCtx = document.getElementById('baitClicksChart').getContext('2d');
+        charts.baitClicks = new Chart(baitClicksCtx, {
+            type: 'bar',
+            data: {
+                labels: Array.from({length: 24}, (_, i) => i + 'h'),
+                datasets: [{
+                    label: 'Tuzak Tıklamaları',
+                    data: Array(24).fill(0),
+                    backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { 
+                        grid: { display: false },
+                        ticks: { display: false }
+                    },
+                    y: { 
+                        beginAtZero: true,
+                        grid: { color: '#2a2a2a' },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        
+        const attackTimelineCtx = document.getElementById('attackTimelineChart').getContext('2d');
+        charts.attackTimeline = new Chart(attackTimelineCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Saldırılar',
+                    data: [],
+                    borderColor: 'rgb(239, 68, 68)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    fill: true,
+                    pointRadius: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { 
+                        grid: { display: false },
+                        ticks: { display: false }
+                    },
+                    y: { 
+                        beginAtZero: true,
+                        grid: { color: '#2a2a2a' },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        
+        const topIPsCtx = document.getElementById('topIPsChart').getContext('2d');
+        charts.topIPs = new Chart(topIPsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(236, 72, 153, 0.8)',
+                        'rgba(153, 102, 255, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 8,
+                            font: { size: 10 }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+
+        
+        const attackTypeCtx = document.getElementById('attackTypeChart').getContext('2d');
+        charts.attackType = new Chart(attackTypeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Honeypot Bait', 'Admin Scan', 'SQL Injection', 'XSS Injection', 'File Upload', 'Path Traversal', 'Other'],
+                datasets: [{
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(236, 72, 153, 0.8)',  // Pink - Honeypot
+                        'rgba(245, 158, 11, 0.8)',  // Orange - Admin
+                        'rgba(239, 68, 68, 0.8)',   // Red - SQL
+                        'rgba(168, 85, 247, 0.8)',  // Purple - XSS
+                        'rgba(16, 185, 129, 0.8)',  // Green - Upload
+                        'rgba(59, 130, 246, 0.8)',  // Blue - Path
+                        'rgba(107, 114, 128, 0.8)'  // Gray - Other
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 8,
+                            font: { size: 10 }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+
+        
+        const pathAnalysisCtx = document.getElementById('pathAnalysisChart').getContext('2d');
+        charts.pathAnalysis = new Chart(pathAnalysisCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Erişim Sayısı',
+                    data: [],
+                    backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                    borderColor: 'rgb(102, 126, 234)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: '#2a2a2a' },
+                        ticks: { precision: 0 }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        
+        const userAgentCtx = document.getElementById('userAgentChart').getContext('2d');
+        charts.userAgent = new Chart(userAgentCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 205, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 8,
+                            font: { size: 10 }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+
+        
+        const hourlyPatternCtx = document.getElementById('hourlyPatternChart').getContext('2d');
+        charts.hourlyPattern = new Chart(hourlyPatternCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Saldırı Sayısı',
+                    data: [],
+                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: '#ccc',
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: { size: 13, weight: 'bold' },
+                        bodyFont: { size: 12 },
+                        callbacks: {
+                            label: function(context) {
+                                return 'Saldırı: ' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: '#2a2a2a',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#888',
+                            font: { size: 10 },
+                            maxRotation: 45,
+                            minRotation: 45
+                        },
+                        title: {
+                            display: true,
+                            text: 'Saat',
+                            color: '#aaa',
+                            font: { size: 11, weight: 'bold' }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#2a2a2a',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#888',
+                            font: { size: 11 },
+                            callback: function(value) {
+                                return Math.floor(value);
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Saldırı Sayısı',
+                            color: '#aaa',
+                            font: { size: 11, weight: 'bold' }
+                        }
+                    }
+                }
+            }
+        });
+
+       
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('total-requests').textContent = data.total_requests || 0;
+                document.getElementById('total-requests-stat').textContent = data.total_requests || 0;
+                document.getElementById('bait-clicks').textContent = data.bait_clicks || 0;
+                document.getElementById('unique-ips').textContent = data.unique_ips || 0;
+                document.getElementById('threats-detected').textContent = (data.bait_clicks || 0) + (data.admin_attempts || 0);
+                
+               
+                const currentBaitCount = data.bait_clicks || 0;
+                const currentAdminAttempts = data.admin_attempts || 0;
+                
+                if (lastBaitCount > 0 && currentBaitCount > lastBaitCount) {
+                    const newClicks = currentBaitCount - lastBaitCount;
+                    showToast(
+                        'Tuzak Tıklaması Tespit Edildi!',
+                        `${newClicks} yeni honeypot endpoint'e erişim algılandı`,
+                        'danger',
+                        6000
+                    );
+                }
+                
+                if (lastAdminAttempts > 0 && currentAdminAttempts > lastAdminAttempts) {
+                    const newAttempts = currentAdminAttempts - lastAdminAttempts;
+                    showToast(
+                        'Admin Girişim Denemesi!',
+                        `${newAttempts} yeni admin login denemesi tespit edildi`,
+                        'warning',
+                        6000
+                    );
+                }
+                
+                lastBaitCount = currentBaitCount;
+                lastAdminAttempts = currentAdminAttempts;
+                
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        async function loadAnomalies() {
+            try {
+                const response = await fetch('/api/ai/anomalies');
+                const data = await response.json();
+                
+                const anomalyList = document.getElementById('anomaly-list');
+                
+                if (!data.anomalies || data.anomalies.length === 0) {
+                    
+                    const message = data.message || 'Sistem normal çalışıyor';
+                    anomalyList.innerHTML = `
+                        <div class="activity-item">
+                            
+                            <div class="activity-content">
+                                <div class="title">Henüz anomali tespit edilmedi</div>
+                                <div class="meta">${message}</div>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('anomaly-count').textContent = '0';
+                    document.getElementById('anomaly-trend').textContent = ' Temiz';
+                    lastAnomalyCount = 0;
+                    return;
+                }
+
+                const currentAnomalyCount = data.total_anomalies || data.anomalies.length;
+                document.getElementById('anomaly-count').textContent = currentAnomalyCount;
+                document.getElementById('anomaly-trend').textContent = ` Trafiğin %${data.anomaly_percentage?.toFixed(1) || 0}`;
+
+                
+                if (lastAnomalyCount > 0 && currentAnomalyCount > lastAnomalyCount) {
+                    const newAnomalies = currentAnomalyCount - lastAnomalyCount;
+                    showToast(
+                        ' Yapay Zeka Anomali Tespiti!',
+                        `${newAnomalies} yeni şüpheli davranış tespit edildi`,
+                        'danger',
+                        7000
+                    );
+                }
+                
+                lastAnomalyCount = currentAnomalyCount;
+
+                
+                const scores = data.anomalies.map(a => a.anomaly_score);
+                const normal = scores.filter(s => s > -0.3).length;
+                const suspicious = scores.filter(s => s <= -0.3 && s > -0.5).length;
+                const anomaly = scores.filter(s => s <= -0.5 && s > -0.7).length;
+                const critical = scores.filter(s => s <= -0.7).length;
+                
+                charts.anomalyScore.data.datasets[0].data = [normal, suspicious, anomaly, critical];
+                charts.anomalyScore.update();
+
+                let html = '';
+                data.anomalies.slice(0, 10).forEach(anomaly => {
+                    const severity = anomaly.anomaly_score < -0.7 ? 'danger' : anomaly.anomaly_score < -0.5 ? 'warning' : 'info';
+                    const icon = severity === 'danger' ? '' : severity === 'warning' ? '' : '';
+                    
+                    html += `
+                        <div class="activity-item">
+                            <div class="activity-icon">${icon}</div>
+                            <div class="activity-content">
+                                <div class="title">IP: ${maskIP(anomaly.ip)} - Skor: ${anomaly.anomaly_score.toFixed(3)}</div>
+                                <div class="meta">${anomaly.request_count} istek • ${anomaly.path || 'Çoklu nokta'}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                anomalyList.innerHTML = html;
+            } catch (error) {
+                console.error('Failed to load anomalies:', error);
+            }
+        }
+
+        async function loadActivity() {
+            try {
+                const response = await fetch('/api/activity/recent');
+                const data = await response.json();
+                
+                const activityFeed = document.getElementById('activity-feed');
+                
+                if (!data.activities || data.activities.length === 0) {
+                    activityFeed.innerHTML = `
+                        <div class="activity-item">
+                            <div class="activity-icon">💤</div>
+                            <div class="activity-content">
+                                <div class="title">Henüz aktivite yok</div>
+                                <div class="meta">Sistem izleniyor</div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                data.activities.slice(0, 15).forEach(activity => {
+                    const icon = activity.type === 'bait' ? '' : 
+                                activity.type === 'admin' ? '' : 
+                                activity.type === 'anomaly' ? '' : '';
+                    
+                    html += `
+                        <div class="activity-item">
+                            <div class="activity-icon">${icon}</div>
+                            <div class="activity-content">
+                                <div class="title">${activity.title}</div>
+                                <div class="meta">${maskIP(activity.ip)} • ${activity.timestamp}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                activityFeed.innerHTML = html;
+            } catch (error) {
+                console.error('Failed to load activity:', error);
+            }
+        }
+
+        async function loadCharts() {
+            try {
+                
+                const timelineData = await fetch('/api/charts/timeline').then(r => r.json());
+                if (timelineData.labels) {
+                    charts.attackTimeline.data.labels = timelineData.labels;
+                    charts.attackTimeline.data.datasets[0].data = timelineData.bait_clicks || [];
+                    charts.attackTimeline.update();
+
+                    charts.baitClicks.data.labels = timelineData.labels;
+                    charts.baitClicks.data.datasets[0].data = timelineData.bait_clicks || Array(24).fill(0);
+                    charts.baitClicks.update();
+                }
+
+                
+                const ipsData = await fetch('/api/charts/top-ips').then(r => r.json());
+                if (ipsData.labels && ipsData.labels.length > 0) {
+                    
+                    const maskedLabels = ipsData.labels.map(ip => maskIP(ip));
+                    charts.topIPs.data.labels = maskedLabels;
+                    charts.topIPs.data.datasets[0].data = ipsData.data;
+                    charts.topIPs.update();
+                }
+
+                
+                const pathsData = await fetch('/api/charts/top-paths').then(r => r.json());
+                if (pathsData.labels && pathsData.labels.length > 0) {
+                    charts.pathAnalysis.data.labels = pathsData.labels;
+                    charts.pathAnalysis.data.datasets[0].data = pathsData.data;
+                    charts.pathAnalysis.update();
+                }
+
+                
+                const patternsData = await fetch('/api/ai/patterns').then(r => r.json());
+                console.log(' Patterns Data:', patternsData);
+                console.log(' attackTypeChart element:', document.getElementById('attackTypeChart'));
+                console.log('charts.attackType exists:', !!charts.attackType);
+                
+                if (patternsData.patterns) {
+                    const types = [0, 0, 0, 0, 0, 0, 0]; 
+                    patternsData.patterns.forEach(p => {
+                        console.log('Pattern:', p.type, 'Count:', p.count);
+                        
+                        if (p.type.includes('Honeypot') || p.type.includes('Trap') || p.type.includes('Bait')) {
+                            types[0] += p.count;
+                            console.log('  Matched Honeypot, total now:', types[0]);
+                        }
+                        else if (p.type.includes('Admin') || p.type.includes('Panel')) {
+                            types[1] += p.count;
+                            console.log('  Matched Admin, total now:', types[1]);
+                        }
+                        else if (p.type.includes('XSS')) {
+                            types[3] += p.count;
+                            console.log('  Matched XSS, total now:', types[3]);
+                        }
+                        else if (p.type.includes('SQL') || p.type.includes('Injection')) {
+                            types[2] += p.count;
+                            console.log('  Matched SQL Injection, total now:', types[2]);
+                        }
+                        else if (p.type.includes('Upload')) {
+                            types[4] += p.count;
+                            console.log('  Matched Upload, total now:', types[4]);
+                        }
+                        else if (p.type.includes('Path') || p.type.includes('Traversal')) {
+                            types[5] += p.count;
+                            console.log('  Matched Path, total now:', types[5]);
+                        }
+                        else {
+                            types[6] += p.count;
+                            console.log('  Matched Other, total now:', types[6]);
+                        }
+                    });
+                    console.log('Attack Types Array:', types);
+                    console.log('SQL Injection Count:', types[0]);
+                    
+                    
+                    if (charts.attackType) {
+                        console.log('Destroying old chart...');
+                        charts.attackType.destroy();
+                        
+                        const attackTypeCtx = document.getElementById('attackTypeChart');
+                        if (!attackTypeCtx) {
+                            console.error('attackTypeChart element not found!');
+                            return;
+                        }
+                        
+                        console.log('Creating new chart with data:', types);
+                        charts.attackType = new Chart(attackTypeCtx.getContext('2d'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Honeypot Bait', 'Admin Scan', 'SQL Injection', 'XSS Injection', 'File Upload', 'Path Traversal', 'Other'],
+                                datasets: [{
+                                    data: types,
+                                    backgroundColor: [
+                                        'rgba(236, 72, 153, 0.8)',  
+                                        'rgba(245, 158, 11, 0.8)',  
+                                        'rgba(239, 68, 68, 0.8)',   
+                                        'rgba(168, 85, 247, 0.8)',  
+                                        'rgba(16, 185, 129, 0.8)',  
+                                        'rgba(59, 130, 246, 0.8)',  
+                                        'rgba(107, 114, 128, 0.8)'  
+                                    ],
+                                    borderWidth: 0
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { 
+                                        display: true,
+                                        position: 'bottom',
+                                        labels: {
+                                            boxWidth: 12,
+                                            padding: 8,
+                                            font: { size: 10 }
+                                        }
+                                    }
+                                },
+                                cutout: '60%'
+                            }
+                        });
+                        console.log('Chart recreated successfully!');
+                    } else {
+                        console.error('charts.attackType not found!');
+                    }
+                } else {
+                    console.error('No patterns data received!');
+                }
+                
+                
+                const userAgentData = await fetch('/api/charts/user-agents').then(r => r.json());
+                if (userAgentData.labels && userAgentData.labels.length > 0 && charts.userAgent) {
+                    charts.userAgent.data.labels = userAgentData.labels;
+                    charts.userAgent.data.datasets[0].data = userAgentData.data;
+                    charts.userAgent.update();
+                }
+                
+               
+                const hourlyData = await fetch('/api/charts/hourly-pattern').then(r => r.json());
+                if (hourlyData.labels && hourlyData.data && charts.hourlyPattern) {
+                    charts.hourlyPattern.data.labels = hourlyData.labels;
+                    charts.hourlyPattern.data.datasets[0].data = hourlyData.data;
+                    charts.hourlyPattern.update();
+                }
+                
+            } catch (error) {
+                console.error('Failed to load chart data:', error);
+            }
+        }
+
+        async function refreshData() {
+            await Promise.all([
+                loadStats(),
+                loadAnomalies(),
+                loadActivity(),
+                loadCharts()
+            ]);
+        }
+
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            refreshData();
+
+            
+            setInterval(refreshData, 30000);
+        });
+    </script>
+</body>
+</html>

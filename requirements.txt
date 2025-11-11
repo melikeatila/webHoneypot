@@ -1,0 +1,21 @@
+﻿fastapi
+uvicorn[standard]
+sqlalchemy
+python-multipart
+python-dotenv
+pandas
+numpy
+scikit-learn
+slowapi
+requests
+aiofiles
+
+# WebSocket support (included in FastAPI)
+websockets
+
+# GeoIP for IP location mapping
+geoip2
+maxminddb
+
+# Email alerts
+aiosmtplib
