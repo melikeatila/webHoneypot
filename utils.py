@@ -15,10 +15,7 @@ def mask_password(pw: str) -> str:
     return pw[:2] + "***" + pw[-2:]
 
 def mask_email(email: str) -> str:
-    """
-    Email maskeleme: isim kısmını maskeler/hash'ler, domain korur
-    Örnek: melike@example.com -> m***e@example.com veya <hash>@example.com
-    """
+    
     if not email or '@' not in email:
         return sha256_hex_str(email)[:16] + "@masked"
     
@@ -32,10 +29,7 @@ def mask_email(email: str) -> str:
     return f"{masked_local}@{domain}"
 
 def mask_phone(phone: str) -> str:
-    """
-    Telefon maskeleme: İlk 3 ve son 2 hane dışında *
-    Örnek: 05551234567 -> 055******67
-    """
+ 
     if not phone:
         return ""
     

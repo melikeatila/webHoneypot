@@ -401,7 +401,7 @@ async def get_stats():
 
 @api.get('/ai/anomalies')
 async def get_ai_anomalies():
-    """AI-powered anomaly detection using IsolationForest"""
+
     try:
         import pandas as pd
         from sklearn.ensemble import IsolationForest
